@@ -67,6 +67,7 @@ int simple_init(void){
 void simple_exit(void){
     printk(KERN_INFO "Removing Module\n");
     DeleteList(&head_list_stu);
+    printk(KERN_INFO "Success!\n");
 }
 
 /*Macros for registering module entry and exit points.*/
