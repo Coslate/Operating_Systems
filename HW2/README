@@ -1,0 +1,8 @@
+#run the code with hw2_linear: list all the kernel tasks with linear method.
+%> ./run.csh hw2_linear
+
+#run the code with hw2_dfs: list all the kernel tasks with dfs method.
+%> ./run.csh hw2_dfs
+
+#list all the tasks with hierarchy(parent-child) in all_task.log.
+%> ps -eH --forest -el > all_task.log
