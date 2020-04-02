@@ -9,8 +9,8 @@
 //using DFS to traverse all the processes.
 void DFS_Traverse(struct task_struct *task_iteration){
     struct task_struct *child_cursor = NULL;
-//    printk(KERN_INFO "pid: %d| pname: %s| state: %ld\n", task_iteration->pid, task_iteration->comm, task_iteration->state);
-    printk(KERN_INFO "pid: %d| ppid: %d| pname: %s| state: %ld\n", task_iteration->pid, task_iteration->parent->pid, task_iteration->comm, task_iteration->state);
+    printk(KERN_INFO "pid: %d| pname: %s| state: %ld\n", task_iteration->pid, task_iteration->comm, task_iteration->state);
+//    printk(KERN_INFO "pid: %d| ppid: %d| pname: %s| state: %ld\n", task_iteration->pid, task_iteration->parent->pid, task_iteration->comm, task_iteration->state);
 
     list_for_each_entry(child_cursor, &task_iteration->children, sibling) {
         DFS_Traverse(child_cursor);
