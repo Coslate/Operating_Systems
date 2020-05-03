@@ -5,6 +5,7 @@
 #include <errno.h>
 #include <math.h>
 #include <time.h>
+#include <pthread.h>
 
 //32 bits, -2147483647 ~ 2147483647
 #define MAX_INT_CHAR_SIZE 11
@@ -15,8 +16,18 @@
 //maximum char size in one line of argv[1]
 #define MAX_SIZE_EACH_TESTCASE MAX_INT_CHAR_SIZE*MAX_INT_EACH_TESTCASE
 
+#define handle_error_en(en, msg) \
+        do { errno = en; perror(msg); exit(EXIT_FAILURE); } while (0)
+
 int  input_int_buff[MAX_TESTCASES][MAX_INT_EACH_TESTCASE];
 int  output_int_buff[MAX_TESTCASES][MAX_INT_EACH_TESTCASE];
+
+typedef struct param_struc {
+    int low;
+    int high;
+    int row_num;
+} param_struc;
+
 
 void PrintHelp(){
     printf("\nError: This hw3.o takes two input arguments.\n");
@@ -59,6 +70,32 @@ void Merge2(const int low, const int mid, const int high, int* S){
     free(u);
 }
 
+void Merge2Thread(const int low, const int mid, const int high, const int row_num){
+    int i = low;
+    int j = mid + 1;
+    int k = 0;
+    int *u = malloc(sizeof(int)*(high-low+1));
+
+    while((i<=mid) && (j<=high)){
+        if(output_int_buff[row_num][i]<output_int_buff[row_num][j]){
+            u[k] = output_int_buff[row_num][i];
+            ++i;
+        }else{
+            u[k] = output_int_buff[row_num][j];
+            ++j;
+        }
+        ++k;
+    }
+    if(i > mid){
+        MoveArray(output_int_buff[row_num], u, (high - j + 1), k, j);
+    }else{
+        MoveArray(output_int_buff[row_num], u, (mid - i + 1), k, i);
+    }
+    MoveArray(u, output_int_buff[row_num], (high - low + 1), low, 0);
+
+    free(u);
+}
+
 void MergeSort2(const int low, const int high, int* S){
     int mid;
 
@@ -67,6 +104,55 @@ void MergeSort2(const int low, const int high, int* S){
         MergeSort2(low, mid, S);
         MergeSort2(mid+1, high, S);
         Merge2(low, mid, high, S);
+    }
+}
+
+void* MergeSort2Thread(void* param_in){
+    int mid;
+    int low;
+    int high;
+    int row_num;
+    param_struc param_in1;
+    param_struc param_in2;
+    pthread_t thread1, thread2;
+    int thread1_ret, thread2_ret;
+
+    param_struc* param = (param_struc*) param_in;
+    low = param->low;
+    high = param->high;
+    row_num = param->row_num;
+
+    if(low < high){
+        mid = floor((low+high)/2);
+        param_in1.low = low;
+        param_in1.high = mid;
+        param_in1.row_num = row_num;
+        param_in2.low = mid+1;
+        param_in2.high = high;
+        param_in2.row_num = row_num;
+
+        thread1_ret = pthread_create(&thread1, NULL, MergeSort2Thread, (void*) &param_in1);
+        if(thread1_ret != 0){
+            handle_error_en(thread1_ret, "1st pthread_create in MergeSort2Thread fails.");
+        }
+
+        thread2_ret = pthread_create(&thread2, NULL, MergeSort2Thread, (void*) &param_in2);
+        if(thread2_ret != 0){
+            handle_error_en(thread2_ret, "2nd pthread_create in MergeSort2Thread fails.");
+        }
+
+        thread1_ret = pthread_join(thread1, NULL);
+        if(thread1_ret != 0){
+            handle_error_en(thread1_ret, "1st pthread_join in MergeSort2Thread fails.");
+        }
+
+        thread2_ret = pthread_join(thread2, NULL);
+        if(thread2_ret != 0){
+            handle_error_en(thread2_ret, "2nd pthread_join in MergeSort2Thread fails.");
+        }
+
+        Merge2(low, mid, high, output_int_buff[row_num]);
+        //Merge2Thread(low, mid, high, row_num);
     }
 }
 
@@ -83,6 +169,9 @@ int main(int argc, char* argv[]){
     int int_count[MAX_INT_EACH_TESTCASE] = {0};
     double time_count[MAX_INT_EACH_TESTCASE] = {0.f};
     const char* err_str;
+    int thread_ret;
+    pthread_t thread_handle;
+    param_struc param_in;
 
     if(argc != 3){
         PrintHelp();
@@ -124,6 +213,7 @@ int main(int argc, char* argv[]){
             }
         }
 
+        /*
         for(int i=0;i<int_count[line_count];++i){
             if(i == int_count[line_count]-1){
                 printf("%d\n", input_int_buff[line_count][i]);
@@ -131,6 +221,7 @@ int main(int argc, char* argv[]){
                 printf("%d, ", input_int_buff[line_count][i]);
             }
         }
+        */
         //printf("---------------\n");
         line_count++;
     }
@@ -139,7 +230,19 @@ int main(int argc, char* argv[]){
     for(int i=0;i<line_count;++i){//for each testcase
         memcpy(output_int_buff[i], input_int_buff[i], int_count[i]*sizeof(int));
         clock_t begin = clock();
-        MergeSort2(0, int_count[i]-1, output_int_buff[i]);
+        param_in.low = 0;
+        param_in.high = int_count[i]-1;
+        param_in.row_num = i;
+
+        thread_ret = pthread_create(&thread_handle, NULL, MergeSort2Thread, (void*) &param_in);
+        if(thread_ret != 0){
+            handle_error_en(thread_ret, "pthread_create in main fails.");
+        }
+
+        thread_ret = pthread_join(thread_handle, NULL);
+        if(thread_ret != 0){
+            handle_error_en(thread_ret, "pthread_join in main fails.");
+        }
         clock_t end = clock();
         time_count[i] = (end-begin)/(double)CLOCKS_PER_SEC;
     }

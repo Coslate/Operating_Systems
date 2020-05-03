@@ -1,6 +1,6 @@
 #declare variable
 CC = gcc
-INCLUDE_FILES = ./include
+INCLUDE_FILES =
 INCLUDE_FLAGS = $(foreach d, $(INCLUDE_FILES), -I $d)
 CTAGS_UTIL = /usr/bin/
 CTAGS_FILES = ./include
@@ -14,9 +14,8 @@ MAIN_OBJECT_EXEC_OUTPUT = ./
 MAIN_TESTING_FOLDER     = ./Testing/
 
 all : clean all_file_tags
-	$(CC) $(CFLAGS) $(INCLUDE_FLAGS) $(MAIN_OBJECT_SOURCE_MAIN) -o $(MAIN_OBJECT_EXEC_OUTPUT)$(MAIN_OBJECT_EXEC_MAIN)
-	@time ${MAIN_OBJECT_EXEC_OUTPUT}$(MAIN_OBJECT_EXEC_MAIN) $(input) $(output)
-	cat $(output)
+	$(CC) $(INCLUDE_FLAGS) $(MAIN_OBJECT_SOURCE_MAIN) $(CFLAGS) -o $(MAIN_OBJECT_EXEC_OUTPUT)$(MAIN_OBJECT_EXEC_MAIN)
+	${MAIN_OBJECT_EXEC_OUTPUT}$(MAIN_OBJECT_EXEC_MAIN) $(input) $(output)
 
 all_file_tags : 
 	$(CTAGS_UTIL)ctags -R ./*

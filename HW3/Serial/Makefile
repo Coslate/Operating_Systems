@@ -1,6 +1,6 @@
 #declare variable
 CC = gcc
-INCLUDE_FILES = ./include
+INCLUDE_FILES =
 INCLUDE_FLAGS = $(foreach d, $(INCLUDE_FILES), -I $d)
 CTAGS_UTIL = /usr/bin/
 CTAGS_FILES = ./include
