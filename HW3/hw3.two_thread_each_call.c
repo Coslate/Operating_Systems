@@ -107,25 +107,6 @@ void MergeSort2(const int low, const int high, int* S){
     }
 }
 
-void* MergeSort2ThreadCall(void* param_in){
-    int mid;
-    int low;
-    int high;
-    int row_num;
-
-    param_struc* param = (param_struc*) param_in;
-    low = param->low;
-    high = param->high;
-    row_num = param->row_num;
-
-    if(low < high){
-        mid = floor((low+high)/2);
-        MergeSort2(low, mid, output_int_buff[row_num]);
-        MergeSort2(mid+1, high, output_int_buff[row_num]);
-        Merge2(low, mid, high, output_int_buff[row_num]);
-    }
-}
-
 void* MergeSort2Thread(void* param_in){
     int mid;
     int low;
@@ -150,24 +131,24 @@ void* MergeSort2Thread(void* param_in){
         param_in2.high = high;
         param_in2.row_num = row_num;
 
-        thread1_ret = pthread_create(&thread1, NULL, MergeSort2ThreadCall, (void*) &param_in1);
+        thread1_ret = pthread_create(&thread1, NULL, MergeSort2Thread, (void*) &param_in1);
         if(thread1_ret != 0){
-            handle_error_en(thread1_ret, "1st pthread_create in MergeSort2ThreadCall fails.");
+            handle_error_en(thread1_ret, "1st pthread_create in MergeSort2Thread fails.");
         }
 
-        thread2_ret = pthread_create(&thread2, NULL, MergeSort2ThreadCall, (void*) &param_in2);
+        thread2_ret = pthread_create(&thread2, NULL, MergeSort2Thread, (void*) &param_in2);
         if(thread2_ret != 0){
-            handle_error_en(thread2_ret, "2nd pthread_create in MergeSort2ThreadCall fails.");
+            handle_error_en(thread2_ret, "2nd pthread_create in MergeSort2Thread fails.");
         }
 
         thread1_ret = pthread_join(thread1, NULL);
         if(thread1_ret != 0){
-            handle_error_en(thread1_ret, "1st pthread_join in MergeSort2ThreadCall fails.");
+            handle_error_en(thread1_ret, "1st pthread_join in MergeSort2Thread fails.");
         }
 
         thread2_ret = pthread_join(thread2, NULL);
         if(thread2_ret != 0){
-            handle_error_en(thread2_ret, "2nd pthread_join in MergeSort2ThreadCall fails.");
+            handle_error_en(thread2_ret, "2nd pthread_join in MergeSort2Thread fails.");
         }
 
         Merge2(low, mid, high, output_int_buff[row_num]);
