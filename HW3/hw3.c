@@ -7,14 +7,10 @@
 #include <time.h>
 #include <pthread.h>
 
-//32 bits, -2147483647 ~ 2147483647
-#define MAX_INT_CHAR_SIZE 11
 //maximum number of integers in one testcase in argv[1]
 #define MAX_INT_EACH_TESTCASE 10000
 //assume max 10000 testcases in argv[1]
 #define MAX_TESTCASES 10000
-//maximum char size in one line of argv[1]
-#define MAX_SIZE_EACH_TESTCASE MAX_INT_CHAR_SIZE*MAX_INT_EACH_TESTCASE
 
 #define handle_error_en(en, msg) \
         do { errno = en; perror(msg); exit(EXIT_FAILURE); } while (0)
