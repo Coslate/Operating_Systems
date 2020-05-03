@@ -8,7 +8,7 @@
 #include <pthread.h>
 
 //maximum number of integers in one testcase in argv[1]
-#define MAX_INT_EACH_TESTCASE 10000
+#define MAX_INT_EACH_TESTCASE 20000
 //assume max 10000 testcases in argv[1]
 #define MAX_TESTCASES 10000
 
@@ -181,8 +181,8 @@ int main(int argc, char* argv[]){
     char* line;
     char* piece_char;
     int line_count = 0;
-    int int_count[MAX_INT_EACH_TESTCASE] = {0};
-    double time_count[MAX_INT_EACH_TESTCASE] = {0.f};
+    int int_count[MAX_TESTCASES] = {0};
+    double time_count[MAX_TESTCASES] = {0.f};
     const char* err_str;
     int thread_ret;
     pthread_t thread_handle;
