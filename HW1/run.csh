@@ -16,4 +16,4 @@ sudo insmod hw1.ko
 sudo rmmod hw1.ko
 
 #check the kernel log buffer
-dmesg > kernel.log
+sudo dmesg > kernel.log
