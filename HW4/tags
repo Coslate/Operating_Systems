@@ -1,0 +1,30 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CC	./Makefile	/^CC = gcc$/;"	m
+CFLAGS	./Makefile	/^CFLAGS = -pthread$/;"	m
+COMPILE_FLAGS	./Makefile	/^COMPILE_FLAGS = -c$/;"	m
+CTAGS_FILES	./Makefile	/^CTAGS_FILES = .\/include$/;"	m
+CTAGS_FLAGS	./Makefile	/^CTAGS_FLAGS = $(foreach d, $(CTAGS_FILES),-a $d\/*)$/;"	m
+CTAGS_UTIL	./Makefile	/^CTAGS_UTIL = \/usr\/bin\/$/;"	m
+INCLUDE_FILES	./Makefile	/^INCLUDE_FILES =$/;"	m
+INCLUDE_FLAGS	./Makefile	/^INCLUDE_FLAGS = $(foreach d, $(INCLUDE_FILES), -I $d)$/;"	m
+MAIN_OBJECT_EXEC_MAIN	./Makefile	/^MAIN_OBJECT_EXEC_MAIN = $(MAIN_OBJECT_NAME_MAIN).out$/;"	m
+MAIN_OBJECT_EXEC_OUTPUT	./Makefile	/^MAIN_OBJECT_EXEC_OUTPUT = .\/$/;"	m
+MAIN_OBJECT_NAME_MAIN	./Makefile	/^MAIN_OBJECT_NAME_MAIN = Hw4$/;"	m
+MAIN_OBJECT_SOURCE_MAIN	./Makefile	/^MAIN_OBJECT_SOURCE_MAIN = $(MAIN_OBJECT_NAME_MAIN).c$/;"	m
+eating	./Hw4.c	/^enum { thinking, hungry, eating } state[5];$/;"	e	enum:__anon1	file:
+hungry	./Hw4.c	/^enum { thinking, hungry, eating } state[5];$/;"	e	enum:__anon1	file:
+main	./Hw4.c	/^int main(){$/;"	f
+mutex	./Hw4.c	/^pthread_mutex_t mutex;$/;"	v
+phil_num	./Hw4.c	/^const int phil_num = 5;$/;"	v
+philosophers	./Hw4.c	/^void* philosophers(void *n){$/;"	f
+pickup_forks	./Hw4.c	/^void pickup_forks(int philosopher_number){$/;"	f
+return_forks	./Hw4.c	/^void return_forks(int philosopher_number){$/;"	f
+self	./Hw4.c	/^pthread_cond_t self[5];$/;"	v
+state	./Hw4.c	/^enum { thinking, hungry, eating } state[5];$/;"	v	typeref:enum:__anon1
+test	./Hw4.c	/^void test(int philosopher_number){$/;"	f
+thinking	./Hw4.c	/^enum { thinking, hungry, eating } state[5];$/;"	e	enum:__anon1	file:

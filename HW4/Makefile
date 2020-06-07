@@ -18,9 +18,9 @@ all : clean all_file_tags
 
 all_file_tags : 
 	$(CTAGS_UTIL)ctags -R ./*
-	$(CTAGS_UTIL)ctags $(CTAGS_FLAGS)
+#	$(CTAGS_UTIL)ctags $(CTAGS_FLAGS)
 
-clean : initialize
+clean :
 	rm -rf $(MAIN_OBJECT_EXEC_OUTPUT)$(MAIN_OBJECT_EXEC_MAIN)
 	rm -rf ./tags
 
